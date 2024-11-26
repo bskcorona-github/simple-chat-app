@@ -4,10 +4,13 @@ let io: Server | null = null;
 
 export default function handler(req: any, res: any) {
   if (!res.socket.server.io) {
+    // 環境変数を利用して CORS 設定を切り替え
+    const origin = process.env.FRONTEND_URL || "http://localhost:3000";
+
     io = new Server(res.socket.server, {
       path: "/api/socket",
       cors: {
-        origin: "http://localhost:3000",
+        origin: origin, // 環境変数で指定されたフロントエンドのURLを許可
         methods: ["GET", "POST"],
       },
     });

@@ -23,7 +23,8 @@ import { ref, onMounted } from 'vue';
 import { io } from "socket.io-client";
 
 // Socket.IO 接続
-const socket = io("http://localhost:3001", { path: "/api/socket" });
+const socket = io(import.meta.env.VITE_API_BASE_URL || "/", { path: "/api/socket" });
+
 
 const username = ref(""); // ユーザー名
 const usernameSet = ref(false); // ユーザー名が設定済みかどうか

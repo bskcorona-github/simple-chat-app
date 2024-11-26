@@ -1,6 +1,4 @@
 module.exports = {
-    reactStrictMode: true,
-    // 静的ファイルを提供する
-    output: 'standalone', // 必要ならスタンドアロンモードを有効化
-  };
-  
+  reactStrictMode: true,
+  staticPageGenerationTimeout: 60, // 必要に応じてタイムアウト設定を拡大
+};
