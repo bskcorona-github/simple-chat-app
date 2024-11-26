@@ -83,7 +83,7 @@ const setUsername = () => {
 const sendMessage = async () => {
   if (message.value.trim() !== "") {
     const config = useRuntimeConfig();
-    const backendUrl = config.public.backendUrl || "http://localhost:3000";
+    const backendUrl = config.public.backendUrl || "https://simple-chat-app-drab.vercel.app/";
 
     try {
       const response = await fetch(`${backendUrl}/api/pusher`, {
