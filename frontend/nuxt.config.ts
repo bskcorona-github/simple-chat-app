@@ -1,10 +1,19 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  // 開発ツールの有効化
   devtools: { enabled: true },
 
-  // サーバーサイドレンダリングを無効化して完全な SPA とする
+  // サーバーサイドレンダリングを無効化 (完全な SPA)
   ssr: false,
+
+  // 環境変数設定
+  runtimeConfig: {
+    public: {
+      pusherKey: process.env.NEXT_PUBLIC_PUSHER_KEY || "",
+      pusherCluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER || "",
+      backendUrl: process.env.NEXT_PUBLIC_BACKEND_URL || "",
+    },
+  },
 
   // Nitro のプリレンダリング設定
   nitro: {
@@ -12,4 +21,6 @@ export default defineNuxtConfig({
       routes: ['/'], // ルートページを事前生成
     },
   },
+
+  compatibilityDate: '2024-11-26',
 });

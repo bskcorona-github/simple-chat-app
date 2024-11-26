@@ -18,6 +18,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
+import { useRuntimeConfig } from "#app";
 import Pusher from "pusher-js";
 
 interface ChatMessage {
@@ -31,11 +32,13 @@ const messages = ref<ChatMessage[]>([]);
 const message = ref("");
 
 onMounted(() => {
-  console.log("Pusher Key:", process.env.NEXT_PUBLIC_PUSHER_KEY);
-  console.log("Pusher Cluster:", process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
+  const config = useRuntimeConfig();
 
-  const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-    cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+  console.log("Pusher Key from runtimeConfig:", config.public.pusherKey);
+  console.log("Pusher Cluster from runtimeConfig:", config.public.pusherCluster);
+
+  const pusher = new Pusher(config.public.pusherKey, {
+    cluster: config.public.pusherCluster,
   });
 
   const channel = pusher.subscribe("chat");
@@ -52,7 +55,9 @@ const setUsername = () => {
 
 const sendMessage = async () => {
   if (message.value.trim() !== "") {
-    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || ""}/api/pusher`, {
+    const config = useRuntimeConfig();
+
+    await fetch(`${config.public.backendUrl}/api/pusher`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -64,6 +69,7 @@ const sendMessage = async () => {
     message.value = "";
   }
 };
+
 </script>
 
 <style scoped>
