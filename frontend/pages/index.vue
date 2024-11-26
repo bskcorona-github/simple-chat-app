@@ -28,9 +28,9 @@ const messages = ref<{ username: string; message: string }[]>([]);
 const message = ref("");
 
 onMounted(() => {
-  const pusher = new Pusher("YOUR_PUSHER_KEY", {
-    cluster: "YOUR_PUSHER_CLUSTER",
-  });
+  const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+  cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+});
 
   const channel = pusher.subscribe("chat");
   channel.bind("message", (data: { username: string; message: string }) => {
