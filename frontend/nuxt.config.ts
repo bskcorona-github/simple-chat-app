@@ -9,8 +9,8 @@ export default defineNuxtConfig({
   // 環境変数設定
   runtimeConfig: {
     public: {
-      pusherKey: process.env.NEXT_PUBLIC_PUSHER_KEY || "c993d50743d259a69fa6",
-      pusherCluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER || "ap3",
+      pusherKey: process.env.NEXT_PUBLIC_PUSHER_KEY || "",
+      pusherCluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER || "",
       backendUrl: process.env.NEXT_PUBLIC_BACKEND_URL || "https://simple-chat-app-drab.vercel.app",
     },
   },
