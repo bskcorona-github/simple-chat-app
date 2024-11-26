@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Simple Chat App</h1>
-    
+
     <!-- ユーザー名の入力 -->
     <div v-if="!usernameSet">
       <input v-model="username" placeholder="ユーザー名を入力" />
@@ -19,47 +19,43 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import { io } from "socket.io-client";
+import { ref, onMounted } from "vue";
+import Pusher from "pusher-js";
 
-// フロントエンドの Socket.IO 接続
-const socket = io("https://simple-chat-app-drab.vercel.app", { path: "/api/socket" });
-
-
-const username = ref(""); // ユーザー名
-const usernameSet = ref(false); // ユーザー名が設定済みかどうか
-const messages = ref<{ username: string; message: string }[]>([]); // メッセージリスト
-const message = ref(""); // 入力中のメッセージ
+const username = ref("");
+const usernameSet = ref(false);
+const messages = ref<{ username: string; message: string }[]>([]);
+const message = ref("");
 
 onMounted(() => {
-  // サーバーから受信したメッセージを表示
-  socket.on("message", (msg: { username: string; message: string }) => {
-    messages.value.push(msg);
+  const pusher = new Pusher("YOUR_PUSHER_KEY", {
+    cluster: "YOUR_PUSHER_CLUSTER",
+  });
+
+  const channel = pusher.subscribe("chat");
+  channel.bind("message", (data: { username: string; message: string }) => {
+    messages.value.push(data);
   });
 });
 
-// ユーザー名を設定
 const setUsername = () => {
   if (username.value.trim() !== "") {
     usernameSet.value = true;
   }
 };
 
-// メッセージを送信
-const sendMessage = () => {
+const sendMessage = async () => {
   if (message.value.trim() !== "") {
-    socket.emit("message", { username: username.value, message: message.value });
-    message.value = ""; // 入力フィールドをクリア
+    await fetch("/api/pusher", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        channel: "chat",
+        event: "message",
+        data: { username: username.value, message: message.value },
+      }),
+    });
+    message.value = "";
   }
 };
 </script>
-
-<style scoped>
-h1 {
-  text-align: center;
-}
-input {
-  margin: 5px;
-  padding: 5px;
-}
-</style>
