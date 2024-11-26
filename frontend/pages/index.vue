@@ -22,8 +22,9 @@
 import { ref, onMounted } from 'vue';
 import { io } from "socket.io-client";
 
-// Socket.IO 接続
-const socket = io("/", { path: "/api/socket" });
+// フロントエンドの Socket.IO 接続
+const socket = io("https://simple-chat-app-drab.vercel.app", { path: "/api/socket" });
+
 
 const username = ref(""); // ユーザー名
 const usernameSet = ref(false); // ユーザー名が設定済みかどうか
