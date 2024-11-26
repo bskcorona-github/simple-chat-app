@@ -45,8 +45,9 @@ onMounted(() => {
   // 環境変数のログ出力
   console.log("Pusher Key:", config.public.pusherKey || "未設定");
   console.log("Pusher Cluster:", config.public.pusherCluster || "未設定");
+  console.log("Backend URL:", config.public.backendUrl || "未設定");
 
-  if (!config.public.pusherKey || !config.public.pusherCluster) {
+  if (!config.public.pusherKey || !config.public.pusherCluster || !config.public.backendUrl) {
     alert("環境変数が正しく設定されていません！");
     return;
   }
@@ -64,6 +65,12 @@ onMounted(() => {
       messages.value.push(data); // メッセージリストに追加
       scrollToBottom(); // メッセージリストをスクロール
     });
+
+    channel.bind("pusher:subscription_error", (status: unknown) => {
+  console.error("Pusher サブスクリプションエラー:", status);
+  alert(`サブスクリプションエラーが発生しました！ステータス: ${String(status)}`);
+});
+
   } catch (error) {
     console.error("Pusher 初期化エラー:", error);
     alert("Pusherの初期化に失敗しました！");
@@ -83,7 +90,7 @@ const setUsername = () => {
 const sendMessage = async () => {
   if (message.value.trim() !== "") {
     const config = useRuntimeConfig();
-    const backendUrl = config.public.backendUrl || "https://simple-chat-app-drab.vercel.app/";
+    const backendUrl = config.public.backendUrl;
 
     try {
       const response = await fetch(`${backendUrl}/api/pusher`, {
