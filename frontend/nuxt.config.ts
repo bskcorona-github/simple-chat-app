@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     public: {
       pusherKey: process.env.NEXT_PUBLIC_PUSHER_KEY || "c993d50743d259a69fa6",
       pusherCluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER || "ap3",
-      backendUrl: process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000",
+      backendUrl: process.env.NEXT_PUBLIC_BACKEND_URL || "https://simple-chat-app-drab.vercel.app/",
     },
   },
   
